@@ -1,0 +1,6 @@
+CREATE TABLE 'gamegalaxy_games' (
+    id INTEGER PRIMARY KEY GENERATED AS IDENTITY,
+    title TEXT NOT NULL,
+
+    date_published TIMESTAMP DEFAULT NOW() NOT NULL
+)
