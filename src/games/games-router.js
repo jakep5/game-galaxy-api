@@ -1,5 +1,6 @@
 const express = require('express');
 const GamesService = require('./games-service');
+const {requireAuthentication} = require('../middleware/jwtAuthentication')
 const path = require('path');
 
 const gamesRouter = express.Router();
@@ -8,6 +9,7 @@ const jsonBodyParser = express.json();
 
 gamesRouter
     .route('/:user_id')
+    .all(requireAuthentication)
     .get((req, res, next) => {
         GamesService.getUserGames(
             req.app.get('db'),
@@ -21,6 +23,7 @@ gamesRouter
 
 gamesRouter
     .route('/')
+    .all(requireAuthentication)
     .post(jsonBodyParser, (req, res, next) => {
         const {
             title,
@@ -53,6 +56,7 @@ gamesRouter
 
 gamesRouter
     .route('/:gameId')
+    .all(requireAuthentication)
     .delete((req, res, next) => {
         GamesService.deleteGame(
             req.app.get('db'),

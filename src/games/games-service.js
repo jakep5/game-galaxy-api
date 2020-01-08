@@ -7,7 +7,8 @@ const GamesService = {
             .select(
                 'game.id',
                 'game.title',
-                'game.completed'
+                'game.completed',
+                'game.user_id'
             )
     },
 

@@ -1,5 +1,6 @@
 const express = require('express')
 const BeersService = require('./folders-service')
+const {requireAuthentication} = require('../middleware/jwtAuthentication')
 const path = require('path')
 
 const foldersRouter = express.Router();
@@ -8,6 +9,7 @@ const jsonBodyParser = express.json();
 
 foldersRouter
     .route('/:user_id')
+    .all(requireAuthentication)
     .get((req, res, next) => {
         FoldersService.getUserFolders(
             req.app.get('db'),
@@ -21,6 +23,7 @@ foldersRouter
 
 foldersRouter
     .route('/')
+    .all(requireAuthentication)
     .post(jsonBodyParser, (req, res, next) => {
         const {name, user_id} = req.body;
 
@@ -49,6 +52,7 @@ foldersRouter
 
 foldersRouter
     .route('/:folderId')
+    .all(requireAuthentication)
     .delete((req, res, next) => {
         FoldersService.deleteFolder(
             req.app.get('db'),
