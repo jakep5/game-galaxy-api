@@ -3,7 +3,7 @@ CREATE TABLE "gamegalaxy_users" (
     user_name TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     date_created TIMESTAMP DEFAULT now() NOT NULL
-)
+);
 
 ALTER TABLE "gamegalaxy_games" 
     ADD COLUMN
