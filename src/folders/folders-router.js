@@ -46,3 +46,16 @@ foldersRouter
             })
             .catch(next);
 })
+
+foldersRouter
+    .route('/:folderId')
+    .delete((req, res, next) => {
+        FoldersService.deleteFolder(
+            req.app.get('db'),
+            req.params.folderId
+        )
+            .then(res.status(204))
+            return null;
+})
+
+module.exports = foldersRouter;
