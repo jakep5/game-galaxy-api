@@ -1,5 +1,5 @@
 const express = require('express')
-const BeersService = require('./folders-service')
+const FoldersService = require('./folders-service')
 const {requireAuthentication} = require('../middleware/jwtAuthentication')
 const path = require('path')
 
@@ -45,14 +45,32 @@ foldersRouter
                 res
                     .status(201)
                     .location(path.posix.join(req.originalUrl, `/${folder.id}`))
-                    .json(FolderService.serializeFolder(folder))
+                    .json(FoldersService.serializeFolder(folder))
             })
             .catch(next);
 })
 
 foldersRouter
-    .route('/:folderId')
+    .route('/folder/:folderId')
     .all(requireAuthentication)
+    .all((req, res, next) => {
+        FoldersService.getById(
+            req.app.get('db'),
+            req.params.folderId
+        )
+            .then(folder => {
+                if (!folder) {
+                    return res.status(404).json({
+                        error: { message: `Folder does not exist`}
+                    })
+                }
+                res.folder = folder;
+                next();
+            })
+    })
+    .get((req, res, next) => {
+        res.json(FoldersService.serializeFolder(res.folder));
+    })
     .delete((req, res, next) => {
         FoldersService.deleteFolder(
             req.app.get('db'),

@@ -26,7 +26,8 @@ const FoldersService = {
     serializeFolder(folder) {
         return {
             id: folder.id,
-            name: xss(folder.name)
+            name: xss(folder.name),
+            user_id: folder.user_id
         }
     },
 
@@ -38,6 +39,14 @@ const FoldersService = {
             .then(rows => {
                 return rows[0]
             })
+    },
+
+    getById(knex, id) {
+        return knex
+            .from('gamegalaxy_folders')
+            .select('*')
+            .where('id', id)
+            .first()
     }
 }
 

@@ -7,6 +7,7 @@ const { NODE_ENV } = require('./config')
 const gamesRouter = require('./games/games-router')
 const foldersRouter = require('./folders/folders-router')
 const usersRouter = require('./users/users-router')
+const authRouter = require('./auth/auth-router')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(cors())
 app.use('/games', gamesRouter);
 app.use('/folders', foldersRouter);
 app.use('/users', usersRouter)
+app.use('/auth', authRouter)
 
 app.use(function errorHandler(error, req, res, next) {
     let response
