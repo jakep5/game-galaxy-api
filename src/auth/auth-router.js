@@ -11,8 +11,6 @@ authRouter
 
         const currentLoginUser = {user_name, password}
 
-        console.log(currentLoginUser)
-
         for (const [key, value] of Object.entries(currentLoginUser))
             if (value == null) {
                 return res.status(400).json({
