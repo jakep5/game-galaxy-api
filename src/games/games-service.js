@@ -7,7 +7,9 @@ const GamesService = {
             .select(
                 'game.id',
                 'game.title',
+                'game.igdb_id',
                 'game.completed',
+                'game.folder_id',
                 'game.user_id'
             )
     },
@@ -38,7 +40,9 @@ const GamesService = {
         return {
             id: game.id,
             title: xss(game.title),
+            igdb_id: game.igdb_id,
             completed: game.completed,
+            folder_id: game.folder_id,
             user_id: game.user_id,
         }
     },

@@ -9,7 +9,6 @@ const jsonBodyParser = express.json();
 
 gamesRouter
     .route('/:user_id')
-    .all(requireAuthentication)
     .get((req, res, next) => {
         GamesService.getUserGames(
             req.app.get('db'),
@@ -27,11 +26,13 @@ gamesRouter
     .post(jsonBodyParser, (req, res, next) => {
         const {
             title,
+            igdb_id,
             completed,
+            folder_id,
             user_id
         } = req.body;
 
-        const newGame = {title, completed, user_id};
+        const newGame = {title, igdb_id, completed, folder_id, user_id};
 
         for (const [key, value] of Object.entries(newGame)) {
             if (value == null) {
