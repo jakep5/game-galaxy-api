@@ -80,4 +80,25 @@ foldersRouter
             return null;
 })
 
+foldersRouter
+    .route('/folder/:folderName')
+    .all(requireAuthentication)
+    .all((req, res, next) => {
+        FoldersService.getByName(
+            req.app.get('db'),
+            req.params.folderName
+        )
+            .then(folder => {
+                if (!folder) {
+                    return res.status(404).json({
+                        error: {
+                            message: 'Folder does not exist'
+                        }
+                    })
+                }
+                res.folder = folder;
+                next();
+            })
+    })
+
 module.exports = foldersRouter;
