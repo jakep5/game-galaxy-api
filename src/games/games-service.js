@@ -51,7 +51,7 @@ const GamesService = {
         return knex
             .where({ id: gameId })
             .update({
-                completed: !completed
+                completed: req.body.completed
             })
     }
 }

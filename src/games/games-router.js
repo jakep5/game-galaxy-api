@@ -69,7 +69,8 @@ gamesRouter
     .patch((req, res, next) => {
         GamesService.toggleCompleted(
             req.app.get('db'),
-            req.params.gameId
+            req.params.gameId,
+            req.body
         )
             .then(res.status(204))
             return null;
