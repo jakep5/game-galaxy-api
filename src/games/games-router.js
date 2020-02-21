@@ -66,5 +66,13 @@ gamesRouter
             .then(res.status(204))
             return null;
     })
+    .patch((req, res, next) => {
+        GamesService.toggleCompleted(
+            req.app.get('db'),
+            req.params.gameId
+        )
+            .then(res.status(204))
+            return null;
+    })
 
 module.exports = gamesRouter;

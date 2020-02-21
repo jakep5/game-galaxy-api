@@ -46,6 +46,14 @@ const GamesService = {
             user_id: game.user_id,
         }
     },
+    
+    toggleCompleted(gameId) {
+        return knex
+            .where({ id: gameId })
+            .update({
+                completed: !completed
+            })
+    }
 }
 
 module.exports = GamesService;
