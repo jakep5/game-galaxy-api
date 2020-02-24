@@ -51,7 +51,7 @@ const UsersService = {
 
     setProfileUrl(db, url, userId) {
         return db
-            .where('id', '=', userId)
+            .where('id', '=', parseInt(userId))
             .update({
                 profileUrl: url
             })
