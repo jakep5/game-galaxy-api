@@ -57,6 +57,9 @@ usersRouter
             })
             .catch(next);
     })
+
+usersRouter
+    .route('/profile')
     .patch((req, res, next) => {
         const { profileUrl, userId } = req.body;
 
