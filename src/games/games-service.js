@@ -52,8 +52,8 @@ const GamesService = {
             .where({ id: gameId })
             .update({
                 completed: req.body.completed
-            })
-    }
+            });
+    },
 }
 
 module.exports = GamesService;

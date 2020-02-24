@@ -47,7 +47,14 @@ const UsersService = {
         if(!REGEX_UPPER_LOWER_NUMBER_SPECIAL.test(password)) {
             return 'Password must contain 1 upper case, 1 lower case, and 1 special character'
         }
+    },
 
+    setProfileUrl(db, url, userId) {
+        return db
+            .where('id', '=', userId)
+            .update({
+                profileUrl: url
+            })
     }
 }
 
