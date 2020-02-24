@@ -61,6 +61,9 @@ usersRouter
 usersRouter
     .route('/profile')
     .patch((req, res, next) => {
+
+        console.log(req.body);
+        
         const { profileUrl, userId } = req.body;
 
         if (!req.body[profile]) {
