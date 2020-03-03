@@ -1,6 +1,6 @@
 const express = require('express');
 const GamesService = require('./games-service');
-const {requireAuthentication} = require('../middleware/jwtAuthentication')
+const {requireAuthentication} = require('../middleware/jwtAuthentication');
 const path = require('path');
 
 const gamesRouter = express.Router();
@@ -73,7 +73,7 @@ gamesRouter
             req.body
         )
             .then(res.status(204))
-            return null;
+            /* return null; */
     })
 
 module.exports = gamesRouter;
