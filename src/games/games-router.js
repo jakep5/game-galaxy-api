@@ -48,7 +48,7 @@ gamesRouter
     .get((req, res, next) => {
         GamesService.getUserGames(
             req.app.get('db'),
-            req.body.user_id
+            req.header.user_id
     )
     .then(games => {
         res.json(games.map(GamesService.serializeGame));
@@ -70,7 +70,7 @@ gamesRouter
             .then(res.status(204))
             return null;
     })
-    
+
     //Update game as completed
     .patch((req, res, next) => {
         GamesService.toggleCompleted(

@@ -15,7 +15,7 @@ foldersRouter
     .get((req, res, next) => {
         FoldersService.getUserFolders(
             req.app.get('db'),
-            req.header.user_id
+            req.headers.user_id
         )
         .then(folders => {
             res.json(folders.map(FoldersService.serializeFolder))
