@@ -8,22 +8,22 @@ const foldersRouter = express.Router();
 const jsonBodyParser = express.json();
 
 foldersRouter
-    .route('/:user_id')
+    .route('/')
     .all(requireAuthentication)
+
+    //Get user's folders
     .get((req, res, next) => {
         FoldersService.getUserFolders(
             req.app.get('db'),
-            req.params.user_id
+            req.body.user_id
         )
         .then(folders => {
             res.json(folders.map(FoldersService.serializeFolder))
         })
-        .catch(next)
-})
+        .catch(next);
+    })
 
-foldersRouter
-    .route('/')
-    .all(requireAuthentication)
+    //Post folder to user's profile
     .post(jsonBodyParser, (req, res, next) => {
         const {name, user_id} = req.body;
 
@@ -48,12 +48,14 @@ foldersRouter
                     .json(FoldersService.serializeFolder(folder))
             })
             .catch(next);
-})
+    })
 
 foldersRouter
-    .route('/folder/:folderId')
+    .route('/:folderId')
     .all(requireAuthentication)
-    .all((req, res, next) => {
+
+    //Get specific folder
+    .get((req, res, next) => {
         FoldersService.getById(
             req.app.get('db'),
             req.params.folderId
@@ -68,11 +70,10 @@ foldersRouter
                 next();
             })
     })
-    .get((req, res, next) => {
-        res.status(200).json(FoldersService.serializeFolder(res.folder));
-    })
+
+    //Delete specific folder
     .delete((req, res, next) => {
-        FoldersService.deleteFolder(
+        FoldersService.deleteById(
             req.app.get('db'),
             req.params.folderId
         )
@@ -80,25 +81,5 @@ foldersRouter
             return null;
 })
 
-foldersRouter
-    .route('/folder/:folderName')
-    .all(requireAuthentication)
-    .all((req, res, next) => {
-        FoldersService.getByName(
-            req.app.get('db'),
-            req.params.folderName
-        )
-            .then(folder => {
-                if (!folder) {
-                    return res.status(404).json({
-                        error: {
-                            message: 'Folder does not exist'
-                        }
-                    })
-                }
-                res.folder = folder;
-                next();
-            })
-    })
 
 module.exports = foldersRouter;

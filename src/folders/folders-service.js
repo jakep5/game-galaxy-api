@@ -16,7 +16,7 @@ const FoldersService = {
         .where('user_id', userId)
     },
 
-    deleteFolder(db, id) {
+    deleteById(db, id) {
         return db
             .from('gamegalaxy_folders')
             .where({id})

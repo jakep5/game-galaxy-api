@@ -8,21 +8,10 @@ const gamesRouter = express.Router();
 const jsonBodyParser = express.json();
 
 gamesRouter
-    .route('/:user_id')
-    .get((req, res, next) => {
-        GamesService.getUserGames(
-            req.app.get('db'),
-            req.params.user_id
-        )
-        .then(games => {
-            res.json(games.map(GamesService.serializeGame));
-        })
-        .catch(next);
-})
-
-gamesRouter
     .route('/')
     .all(requireAuthentication)
+
+    //Add game to user profile
     .post(jsonBodyParser, (req, res, next) => {
         const {
             title,
@@ -55,9 +44,24 @@ gamesRouter
             .catch(next);
     })
 
+    //Get User's Games
+    .get((req, res, next) => {
+        GamesService.getUserGames(
+            req.app.get('db'),
+            req.body.user_id
+    )
+    .then(games => {
+        res.json(games.map(GamesService.serializeGame));
+    })
+    .catch(next);
+    })
+    
+
 gamesRouter
     .route('/:gameId')
     .all(requireAuthentication)
+
+    //Delete game from user's profile
     .delete((req, res, next) => {
         GamesService.deleteGame(
             req.app.get('db'),
@@ -66,6 +70,8 @@ gamesRouter
             .then(res.status(204))
             return null;
     })
+    
+    //Update game as completed
     .patch((req, res, next) => {
         GamesService.toggleCompleted(
             req.app.get('db'),
@@ -73,7 +79,6 @@ gamesRouter
             req.body
         )
             .then(res.status(204))
-            /* return null; */
     })
 
 module.exports = gamesRouter;

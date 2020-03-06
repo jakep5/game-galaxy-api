@@ -6,6 +6,8 @@ const usersRouter = express.Router();
 
 const jsonBodyParser = express.json();
 
+
+/**Create User */
 usersRouter
     .route('/')
     .post(jsonBodyParser, (req, res, next) => {
@@ -57,31 +59,7 @@ usersRouter
             })
             .catch(next);
     })
+/**/
 
-usersRouter
-    .route('/profile')
-    .patch((req, res, next) => {
-
-        console.log(req.body);
-        
-        const { profileUrl, userId } = req.body;
-
-        if (!req.body[profile]) {
-            return res.status(400).json({
-                error: `Must include profile url`
-            })
-        };
-
-        UsersService.setProfileUrl(
-            req.app.get('db'),
-            profileUrl,
-            userId
-        )
-            .then(url => {
-                res
-                    .status(204)
-                    .json(url)
-            })
-    })
 
 module.exports = usersRouter
