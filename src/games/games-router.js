@@ -48,7 +48,7 @@ gamesRouter
     .get((req, res, next) => {
         GamesService.getUserGames(
             req.app.get('db'),
-            req.header.user_id
+            req.headers.user_id
     )
     .then(games => {
         res.json(games.map(GamesService.serializeGame));
