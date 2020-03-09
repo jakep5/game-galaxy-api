@@ -7,11 +7,11 @@ const foldersRouter = express.Router();
 
 const jsonBodyParser = express.json();
 
-foldersRouter
-    .route('/')
-    .all(requireAuthentication)
+foldersRouter.all(requireAuthentication);
 
     //Get user's folders
+foldersRouter
+    .route('/')
     .get((req, res, next) => {
         FoldersService.getUserFolders(
             req.app.get('db'),
@@ -50,23 +50,23 @@ foldersRouter
             .catch(next);
     })
 
+    //Get/Open a specific folder
 foldersRouter
-    .route('/:folderId')
-    .all(requireAuthentication)
+    .route('/id/:folderId')
 
-    //Get specific folder
     .get((req, res, next) => {
         FoldersService.getById(
             req.app.get('db'),
             req.params.folderId
-        )
+        )   
             .then(folder => {
                 if (!folder) {
                     return res.status(404).json({
                         error: { message: `Folder does not exist`}
                     })
+                } else {
+                    res.send(folder);
                 }
-                res.folder = folder;
                 next();
             })
     })
@@ -79,7 +79,7 @@ foldersRouter
         )
             .then(res.status(204))
             return null;
-})
+    })
 
 
 module.exports = foldersRouter;

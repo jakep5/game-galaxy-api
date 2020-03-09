@@ -7,9 +7,10 @@ const gamesRouter = express.Router();
 
 const jsonBodyParser = express.json();
 
+gamesRouter.all(requireAuthentication);
+
 gamesRouter
     .route('/')
-    .all(requireAuthentication)
 
     //Add game to user profile
     .post(jsonBodyParser, (req, res, next) => {
@@ -58,8 +59,7 @@ gamesRouter
     
 
 gamesRouter
-    .route('/:gameId')
-    .all(requireAuthentication)
+    .route('/id/:gameId')
 
     //Delete game from user's profile
     .delete((req, res, next) => {
@@ -68,17 +68,16 @@ gamesRouter
             req.params.gameId
         )
             .then(res.status(204))
-            return null;
     })
 
     //Update game as completed
-    .patch((req, res, next) => {
+    .patch(jsonBodyParser, (req, res, next) => {
         GamesService.toggleCompleted(
             req.app.get('db'),
             req.params.gameId,
             req.body
         )
-            .then(res.status(204))
+            .then(res.status(204));
     })
 
 module.exports = gamesRouter;

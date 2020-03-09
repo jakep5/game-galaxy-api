@@ -26,8 +26,8 @@ const GamesService = {
             .delete()
     },
 
-    insertGameIntoDb(knex, newGame) {
-        return knex
+    insertGameIntoDb(db, newGame) {
+        return db
             .insert(newGame)
             .into('gamegalaxy_games')
             .returning('*')
@@ -47,11 +47,12 @@ const GamesService = {
         }
     },
     
-    toggleCompleted(gameId) {
-        return knex
+    toggleCompleted(db, gameId, body) {
+        return db
+            .from('gamegalaxy_games')
             .where({ id: gameId })
             .update({
-                completed: req.body.completed
+                completed: body.completed,
             });
     },
 }

@@ -42,6 +42,7 @@ const FoldersService = {
     },
 
     getById(knex, id) {
+        console.log(id);
         return knex
             .from('gamegalaxy_folders')
             .select('*')

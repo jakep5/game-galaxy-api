@@ -9,7 +9,7 @@ const foldersRouter = require('./folders/folders-router')
 const usersRouter = require('./users/users-router')
 const authRouter = require('./auth/auth-router')
 
-const app = express()
+const app = express();
 
 const morganOption = (NODE_ENV === 'production')
     ? 'tiny'
