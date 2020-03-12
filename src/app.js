@@ -24,6 +24,11 @@ app.use('/folders', foldersRouter);
 app.use('/users', usersRouter)
 app.use('/auth', authRouter)
 
+
+app.get('/', (req, res) => {
+    res.send('Working!');
+});
+
 app.use(function errorHandler(error, req, res, next) {
     let response
     if (NODE_ENV === 'production') {
