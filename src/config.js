@@ -6,4 +6,4 @@ module.exports = {
     JWT_EXPIRY: process.env.JWT_EXPIRY || '1800s',
     JWT_SECRET: process.env.JWT_SECRET || 'change-this-secret',
     API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'
-}
+};

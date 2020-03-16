@@ -1,6 +1,6 @@
-const express = require('express')
-const UsersService = require('./users-service')
-const path = require('path')
+const express = require('express');
+const UsersService = require('./users-service');
+const path = require('path');
 
 const usersRouter = express.Router();
 
@@ -19,13 +19,13 @@ usersRouter
                     error: `${field} is required`
                 })
 
-        let passwordError = UsersService.validatePassword(password)
+        let passwordError = UsersService.validatePassword(password);
 
         if(passwordError) {
             return res.status(400).json({
                 error: passwordError
             })
-        }
+        };
 
         UsersService.getUserWithUserName(
             req.app.get('db'),

@@ -1,7 +1,7 @@
-const express = require('express')
-const FoldersService = require('./folders-service')
-const {requireAuthentication} = require('../middleware/jwtAuthentication')
-const path = require('path')
+const express = require('express');
+const FoldersService = require('./folders-service');
+const {requireAuthentication} = require('../middleware/jwtAuthentication');
+const path = require('path');
 
 const foldersRouter = express.Router();
 
@@ -9,7 +9,7 @@ const jsonBodyParser = express.json();
 
 foldersRouter.all(requireAuthentication);
 
-    //Get user's folders
+//Get user's folders
 foldersRouter
     .route('/')
     .get((req, res, next) => {
@@ -48,9 +48,9 @@ foldersRouter
                     .json(FoldersService.serializeFolder(folder))
             })
             .catch(next);
-    })
+    });
 
-    //Get/Open a specific folder
+//Get/Open a specific folder
 foldersRouter
     .route('/id/:folderId')
 
@@ -79,7 +79,7 @@ foldersRouter
         )
             .then(res.status(204))
             return null;
-    })
+    });
 
 
 module.exports = foldersRouter;

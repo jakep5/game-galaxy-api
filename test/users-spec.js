@@ -11,9 +11,10 @@ describe('Users endpoints', function() {
             client: 'pg',
             connection: process.env.TEST_DATABASE_URL
         })
+        app.set('db', db)
     });
 
-    after('disconnect from db', () => db.destory());
+    after('disconnect from db', () => db.destroy());
 
     before('cleanup', () => testHelperObject.cleanTables(db));
 
@@ -23,11 +24,11 @@ describe('Users endpoints', function() {
         context('Correct path', () => {
             it('responds with 201, storing bcrypted password on user creation', () => {
                 const newUser = {
-                    user_name: 'testuser',
-                    password: '!Testpassword1'
+                    user_name: "testuser",
+                    password: "!Testpassword1"
                 }
                 return supertest(app)
-                    .post('/users/')
+                    .post('/users')
                     .send(newUser)
                     .expect(201)
                     .expect(res => {
@@ -47,6 +48,16 @@ describe('Users endpoints', function() {
                                 expect(compareMatch).to.be.true;
                             })
                     })
+            })
+
+            it('responds with 400 status when a field is missing', () => {
+                const newUser = {
+                    password: "!Testpassword1"
+                }
+                return supertest(app)
+                    .post('/users/')
+                    .send(newUser)
+                    .expect(400)
             })
         })
     })

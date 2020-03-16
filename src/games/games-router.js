@@ -57,7 +57,6 @@ gamesRouter
     .catch(next);
     })
     
-
 gamesRouter
     .route('/id/:gameId')
 
@@ -78,6 +77,6 @@ gamesRouter
             req.body
         )
             .then(res.status(204));
-    })
+    });
 
 module.exports = gamesRouter;
