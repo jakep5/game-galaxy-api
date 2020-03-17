@@ -28,117 +28,115 @@ describe('games endpoints', function() {
     before('cleanup tables', () => testHelperObject.cleanTables(db))
     
     afterEach('cleanup tables', () => testHelperObject.cleanTables(db))
-    
-    describe(`Protected endpoints`, () => {
-        beforeEach('insert games', () => 
+
+
+    describe(`GET /games/`, () => {
+        context(`Given there are games and folders in the database`, () => {
+            beforeEach('insert test games', () => {
+                testHelperObject.seedTestGames(
+                    db,
+                    testUsers,
+                    testGames,
+                    testFolders
+                )
+            })
+
+            it('Responds with corresponding games when valid username and password are supplied', () => {
+                /* const expectedGame = testHelperObject.makeExpectedGame(
+                    testGames[0]
+                ) */
+
+                return supertest(app)
+                    .get(`/games`)
+                    .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[1]))
+                    .set('user_id', 1)
+                    .expect(200, testGames)
+            })
+        })
+
+        context(`Given there are no games in the database corresponding to the user`, () => {
+            beforeEach(() => 
+                testHelperObject.seedTestUsers(db, testUsers)
+            )
+            it(`responds with no games`, () => {
+                const userId = testUsers[0].id;
+                return supertest(app)
+                    .get(`/games`)
+                    .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[0]))
+                    .set('user_id', 1)
+                    .expect(res => {
+                        expect(res.body == [])
+                    })
+            })
+        })
+    })
+
+    describe(`POST /games`, () => {
+        const testGames = testHelperObject.makeGamesArray();
+        const testUsers = testHelperObject.makeUsersArray();
+        const testFolders = testHelperObject.makeFoldersArray();
+
+        beforeEach('insert test games', () => {
             testHelperObject.seedTestGames(
                 db, 
                 testUsers,
                 testGames,
                 testFolders
             )
-        )
-
-        const protectedEndpoints = [
-            {
-                name: 'GET /folders',
-                path: '/folders'
-            },
-            {
-                name: 'POST /folders',
-                path: '/folders'
-            },
-            {
-                name: 'DELETE /folders by ID',
-                path: '/folders/id/:folderId'
-            },
-            {
-                name: 'GET /folders by ID',
-                path: '/folders/id/:folderId'
-            },
-            {
-                name: 'POST /games',
-                path: '/games'
-            },
-            {
-                name: 'GET /games by userId',
-                path: '/games'
-            },
-            {
-                name: 'DELETE /games by game ID',
-                path: '/games/id/:gameId'
-            },
-            {
-                name: 'PATCH /games by game ID',
-                path: '/games/id/:gameId'
-            }
-        ]
-
-        protectedEndpoints.forEach(endpoint => {
-            describe(endpoint.name, () => {
-                it (`responds with 401 when no bearer token/incorrect authorization`, () => {
-                    return supertest(app)
-                        .get(endpoint.path)
-                        .expect(401, { error: `Unauthorized request` })
-                })
-
-                it(`responds with 401 when JWT secret supplied is invalid`, () => {
-                    const validUser = testUsers[0];
-                    const invalidSecret = 'incorrect secret';
-                    return supertest(app)
-                        .get(endpoint.path)
-                        .set('Authorization', testHelperObject.makeAuthenticationHeader(validUser, invalidSecret))
-                        .expect(401, { error: `Unauthorized request` })
-                })
-
-                it(`responds 401 'Unauthorized request' when invalid sub in payload`, () => {
-                    const invalidUser = { user_name: 'invalid-user-name', id: 1 }
-                    return supertest(app)
-                        .get(endpoint.path)
-                        .set('Authorization', makeAuthenticationHeader(invalidUser))
-                        .expect(401, { error: `Unauthorized request` })
-                })
-            })           
         })
 
-        describe(`GET /games/`, () => {
-            context(`Given there are games and folders in the database`, () => {
-                beforeEach('insert test games', () => {
-                    testHelperObject.seedTestGames(
-                        db,
-                        testUsers,
-                        testGames,
-                        testFolders
-                    )
-                })
+        it('creates a new game, responding with 201', function() {
+            const newGame = {
+                title: "Call of Duty 3",
+                igdb_id: 156,
+                completed: "false",
+                folder_id: 1,
+                user_id: 1
+            }
+            return supertest(app)
+                .post('/games/')
+                .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[0]))
+                .set('user_id', 1)
+                .send(newGame)
+                .expect(201)
+        })
 
-                it('Responds with corresponding games when valid username and password are supplied', () => {
-                    const expectedGame = testHelperObject.makeExpectedGame(
-                        testGames[0]
-                    )
+        it('responds with 400 when a field is missing', function() {
+            const newGame = {
+                igdb_id: 158,
+                completed: false,
+                folder_id: 1,
+                user_id: 1
+            }
 
-                    return supertest(app)
-                        .get(`/games`)
-                        .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[1]))
-                        .set('user_id', 1)
-                })
-            })
+            return supertest(app)
+                .post('/games/')
+                .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[0]))
+                .set('user_id', 1)
+                .send(newGame)
+                .expect(400)
+        })
+    })
 
-            context(`Given there are no games in the database corresponding to the user`, () => {
-                beforeEach(() => 
-                    testHelperObject.seedTestUsers(db, testUsers)
-                )
-                it(`responds with no games`, () => {
-                    const userId = testUsers[0].id;
-                    return supertest(app)
-                        .get(`/games`)
-                        .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[0]))
-                        .set('user_id', 1)
-                        .expect(res => {
-                            expect(res.body == [])
-                        })
-                })
-            })
+    describe('DELETE /game/id/:gameId', () => {
+        const testGames = testHelperObject.makeGamesArray();
+        const testUsers = testHelperObject.makeUsersArray();
+        const testFolders = testHelperObject.makeFoldersArray();
+
+        beforeEach('insert test games', () => {
+            testHelperObject.seedTestGames(
+                db, 
+                testUsers,
+                testGames,
+                testFolders
+            )
+        })
+
+        it('deletes a game by providing game id to delete', () => {
+            return supertest(app)
+                .delete('/games/id/2')
+                .set('Authorization', testHelperObject.makeAuthenticationHeader(testUsers[0]))
+                .expect(204)
         })
     })
 })

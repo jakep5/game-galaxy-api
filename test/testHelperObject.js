@@ -8,7 +8,7 @@ const testHelperObject = {
                 id: 1,
                 title: "Halo 4",
                 igdb_id: 123,
-                completed: "false",
+                completed: false,
                 folder_id: 1,
                 user_id: 1
             },
@@ -16,7 +16,7 @@ const testHelperObject = {
                 id: 2,
                 title: "Halo 3",
                 igdb_id: 124,
-                completed: "false",
+                completed: false,
                 folder_id: 1,
                 user_id: 1
             },
@@ -24,7 +24,7 @@ const testHelperObject = {
                 id: 3,
                 title: "Red Dead Redemption",
                 igdb_id: 125,
-                completed: "false",
+                completed: false,
                 folder_id: 1,
                 user_id: 1
             },
@@ -32,7 +32,7 @@ const testHelperObject = {
                 id: 4,
                 title: "Super Smash Brothers Ultimate",
                 igdb_id: 126,
-                completed: "false",
+                completed: false,
                 folder_id: 1,
                 user_id: 1
             }
@@ -80,7 +80,7 @@ const testHelperObject = {
                 "gamegalaxy_users"
                 RESTART IDENTITY CASCADE`
             )
-            .then(() =>
+            /* .then(() =>
                 Promise.all([
                     trx.raw(`ALTER SEQUENCE "gamegalaxy_games_id_seq" minvalue 0 START WITH 1`),
                     trx.raw(`ALTER SEQUENCE "gamegalaxy_folders_id_seq" minvalue 0 START WITH 1`),
@@ -88,7 +88,7 @@ const testHelperObject = {
                     trx.raw(`SELECT setval('"gamegalaxy_folders_id_seq"', 1)`),
                     trx.raw(`SELECT setval('"gamegalaxy_users_id_seq"', 1)`),
                 ])
-            )
+            ) */
         )
     },
 
@@ -98,11 +98,11 @@ const testHelperObject = {
             password: bcrypt.hashSync(user.password, 1)
         }))
         return db.into('gamegalaxy_users').insert(usersWithHash)
-            .then(() =>
+            /* .then(() =>
                 db.raw(
                     `SELECT setval('gamegalaxy_users_id_seq', ?)`,
                     [users[users.length - 1].id],
-                ))
+                )) */
     },
 
     seedTestGames(db, users, games, folders) {
@@ -110,20 +110,27 @@ const testHelperObject = {
             await this.seedTestUsers(trx, users)
             await this.seedTestFolders(trx, folders)
             await trx.into('gamegalaxy_games').insert(games)
-            await trx.raw(
+            /* await trx.raw(
                 `SELECT setval('gamegalaxy_games', ?)`,
                 [games[games.length - 1].id],
-            )
+            ) */
         })
     },
 
     seedTestFolders(db, folders) {
         return db.transaction(async trx => {
             await trx.into('gamegalaxy_folders').insert(folders)
-            await trx.raw(
+            /* await trx.raw(
                 `SELECT setval('gamegalaxy_folders', ?)`,
                 [folders[folders.length - 1].id],
-            )
+            ) */
+        })
+    },
+
+    seedTestFoldersAndUsers(db, users, folders) {
+        return db.transaction(async trx => {
+            await this.seedTestUsers(db, users)
+            await trx.into('gamegalaxy_folders').insert(folders)
         })
     },
 
@@ -142,7 +149,8 @@ const testHelperObject = {
                 title: game.title,
                 igdb_id: game.igdb_id,
                 completed: game.completed,
-                folder_id: game.folder_id
+                folder_id: game.folder_id,
+                user_id: game.user_id
             }
         ]
     },
