@@ -2,6 +2,8 @@
 
 API implemented for use with Game Galaxy application
 
+Link to live application: https://game-galaxy.now.sh/
+
 ## Authentication
 
 Authentication implemented utilizing JWT authentication. Users log in with username and password, and a user_id is assigned upon creation. Added folders and beers by each user are associated with the respective user's user_id.
