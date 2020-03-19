@@ -1,10 +1,14 @@
 # Game Galaxy API
 
-API implemented for use with Game Galaxy application
+API implemented for use with Game Galaxy application. API gives the user the ability to login, authenticate, create folders, and search/save games to their profile. The coordination between this API and the Game Galaxy client allows users to create a profile with folders containing their saved games, and allows users to check games off when they are completed. the IGDB 3rd party API is utilized to allow the users to search their large database of games.
 
 ## Link to live application
 
 https://game-galaxy.now.sh/
+
+## API technologies
+
+Node.js, Express.js and Express Router, JavaScript, PostgreSQL, Supertest, Knex.js
 
 ## Authentication
 
