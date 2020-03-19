@@ -2,7 +2,9 @@
 
 API implemented for use with Game Galaxy application
 
-Link to live application: https://game-galaxy.now.sh/
+## Link to live application
+
+https://game-galaxy.now.sh/
 
 ## Authentication
 
